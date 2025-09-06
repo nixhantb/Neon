@@ -20,6 +20,10 @@ namespace Neon.Common
         public string? CronExpression { get; set; }
         public string? LastError { get; set; }
         public DateTime? NextRun { get; set; }
+        /// <summary>
+        /// A lease is a temporary “lock” on a job that a worker takes when it starts processing the job.
+        /// It prevents other workers from picking up the same job at the same time.
+        /// </summary>
         public string? LeaseId { get; set; }
         public DateTime? LeaseExpiry { get; set; }
 
