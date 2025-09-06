@@ -164,11 +164,17 @@ public class MemoryJobStorage : IJobManager
 
     public Task<Dictionary<JobState, int>> GetJobCountsByState(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var jobCounts = _jobs.Values.GroupBy(j => j.State)
+        .ToDictionary(g => g.Key, g => g.Count());
+
+        return Task.FromResult(jobCounts);
     }
 
     public Task<Dictionary<string, int>> GetQueueLength(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var queueLengths = _jobs.Values.Where(j => j.State == JobState.Enqueued || j.State == JobState.Scheduled)
+                        .GroupBy(q => q.Job.Queue)
+                        .ToDictionary(g => g.Key, q => q.Count());
+        return Task.FromResult(queueLengths);
     }
 }
