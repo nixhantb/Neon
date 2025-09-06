@@ -5,11 +5,11 @@ using Neon.Core.States;
 
 namespace Neon.Storage;
 
-public class IMemoryJobStorage : IJobStorage, IJobScheduler, IJobQueue
+public class MemoryJobStorage : IJobManager
 {
     private readonly ConcurrentDictionary<string, JobRecord> _jobs = new();
-    private readonly ILogger<IMemoryJobStorage> _logger;
-    public IMemoryJobStorage(ILogger<IMemoryJobStorage> logger)
+    private readonly ILogger<MemoryJobStorage> _logger;
+    public MemoryJobStorage(ILogger<MemoryJobStorage> logger)
     {
         _logger = logger;
     }
@@ -160,5 +160,15 @@ public class IMemoryJobStorage : IJobStorage, IJobScheduler, IJobQueue
         _jobs.TryUpdate(jobRecord.Id, jobRecord, _jobs[jobRecord.Id]);
         return Task.CompletedTask;
 
+    }
+
+    public Task<Dictionary<JobState, int>> GetJobCountsByState(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Dictionary<string, int>> GetQueueLength(CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 }
