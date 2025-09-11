@@ -100,8 +100,5 @@ public class JobScheduler : BackgroundService
     private DateTime CalculateNextRun(string CronExpression, DateTime from){
         return from.AddMinutes(5);
     }
-
-
-    
     
 }
