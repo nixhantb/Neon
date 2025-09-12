@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Neon.Common;
 
 namespace Neon.Core.Engine;
@@ -53,6 +54,10 @@ public class JobWorker : BackgroundService
                 // waits for slot using _semaphore - ensures concurrency limit
                 await _semaphore.WaitAsync(stoppingToken);
                 // calls ProcessNextJob to handle one job at a time
+                var task = ProcessNextJob(stoppingToken);
+                tasks.Add(task);
+
+                tasks.RemoveAll(t => t.IsCompleted);
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
             {
@@ -99,6 +104,7 @@ public class JobWorker : BackgroundService
             else
             {
                 // handle job Failure
+                await HandleJobFailure(jobRecord, result);
             }
 
         }
