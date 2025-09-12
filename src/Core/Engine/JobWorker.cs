@@ -119,4 +119,35 @@ public class JobWorker : BackgroundService
         _logger.LogInformation($"Job {jobRecord.Id} completed completed successfully");
     }
 
-}
+    public async Task HandleJobFailure(JobRecord jobRecord, JobResult jobResult){
+
+        jobRecord.RetryCount++;
+        jobRecord.LastError = jobResult.ErrorMessage;
+        
+        jobRecord.LeaseId = null;
+        jobRecord.LeaseExpiry = null;
+
+        if(jobRecord.RetryCount >= jobRecord.MaxRetries){
+
+            // move it to dead letter queue 
+            // Prevents infinite retry loops and allows failed jobs to be inspected or
+            // reprocessed manually later
+
+            jobRecord.State = States.JobState.DeadLetter;
+            _logger.LogWarning($"Job {jobRecord.Id} moved to dead letter queue...");
+        }
+        else{
+            // Avoid overwhelming the system with immediate retries.
+            var delay = TimeSpan.FromSeconds(Math.Pow(2, jobRecord.RetryCount - 1)*30);
+            jobRecord.State  = States.JobState.Scheduled;
+            jobRecord.ScheduledAt = DateTime.UtcNow.Add(delay);
+
+             _logger.LogWarning("Job {JobId} scheduled for retry {RetryCount}/{MaxRetries} in {DelaySeconds}s", 
+                    jobRecord.Id, jobRecord.RetryCount, jobRecord.MaxRetries, delay.TotalSeconds);
+            }
+
+            await _jobManager.Update(jobRecord);
+        }
+
+    }
+
