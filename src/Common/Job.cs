@@ -36,17 +36,17 @@ namespace Neon.Common
         /// <param name="method"></param>
         /// <param name="queue"></param>
         /// <returns></returns>
-        public static Job FromExpression(Expression<Action> methodCall, string queue)
+        public static Job FromExpression(Expression<Action> methodCall, string queue = null)
         {
             return FromExpression(methodCall, null, queue);
         }
 
-        public static Job FromExpression(Expression<Func<Task>> methodCall, string? queue)
+        public static Job FromExpression(Expression<Func<Task>> methodCall, string? queue = null)
         {
             return FromExpression(methodCall, null, queue);
         }
 
-        public static Job FromExpression<TType>(Expression<Action<TType>> methodCall, string? queue)
+        public static Job FromExpression<TType>(Expression<Action<TType>> methodCall, string? queue = null)
         {
             return FromExpression(methodCall, typeof(TType), queue);
         }
