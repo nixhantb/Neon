@@ -83,24 +83,28 @@ public class JobClient : IJobClient
         return await RecurringJobInternal(jobId, job, cronExpression);
     }
 
-    public Task<string> ScheduleAsync(Expression<Action> methodCall, DateTime scheduledTime)
+    public async Task<string> ScheduleAsync(Expression<Action> methodCall, DateTime scheduledTime)
     {
-        throw new NotImplementedException();
+        var job = Job.FromExpression(methodCall);
+        return await ScheduleJobInternal(job, scheduledTime);
     }
 
-    public Task<string> ScheduleAsync(Expression<Func<Task>> methodCall, DateTime scheduledTime)
+    public async Task<string> ScheduleAsync(Expression<Func<Task>> methodCall, DateTime scheduledTime)
     {
-        throw new NotImplementedException();
+        var job = Job.FromExpression(methodCall);
+        return await ScheduleJobInternal(job, scheduledTime);
     }
 
-    public Task<string> ScheduleAsync<T>(Expression<Action<T>> methodCall, DateTime scheduledTime)
+    public async Task<string> ScheduleAsync<T>(Expression<Action<T>> methodCall, DateTime scheduledTime)
     {
-        throw new NotImplementedException();
+        var job = Job.FromExpression(methodCall);
+        return await ScheduleJobInternal(job, scheduledTime);
     }
 
-    public Task<string> ScheduleAsync<T>(Expression<Func<T, Task>> methodCall, DateTime scheduledTime)
+    public async Task<string> ScheduleAsync<T>(Expression<Func<T, Task>> methodCall, DateTime scheduledTime)
     {
-        throw new NotImplementedException();
+        var job = Job.FromExpression(methodCall);
+        return await ScheduleJobInternal(job, scheduledTime);
     }
 
     private async Task<string> EnqueueJobInternal(Job job)
