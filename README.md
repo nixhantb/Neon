@@ -20,22 +20,22 @@ Job Scheduling & Execution System
 
 This diagram shows the architecture of the job system and how different components interact.
 
-          ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-          │   Job Client    │    │  Job Scheduler  │    │   Job Worker    │
-          │   (Public API)  │    │  (Delayed/Cron) │    │  (Execution)    │
-          └─────────┬───────┘    └─────────┬───────┘    └─────────┬───────┘
-                    │                      │                      │
-                    ▼                      ▼                      ▼
-        ┌─────────────────────────────────────────────────────────┐
-        │                     IJobStorage                         │
-        │              (Extensibility Layer)                      │
-        └─────────────────────────────────────────────────────────┘
-                    │                                              │
-                    ▼                                              ▼
-        ┌─────────────────┐                          ┌─────────────────┐
-        │ InMemoryStorage │                          │ SqlServerStorage│
-        │       (V1)      │                          │       (V2)      │
-        └─────────────────┘                          └─────────────────┘
+            ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+            │   Job Client    │    │  Job Scheduler  │    │   Job Worker    │
+            │   (Public API)  │    │  (Delayed/Cron) │    │  (Execution)    │
+            └─────────┬───────┘    └─────────┬───────┘    └─────────┬───────┘
+                      │                      │                      │
+                      ▼                      ▼                      ▼
+                ┌─────────────────────────────────────────────────────────┐
+                │                     IJobManager                         │
+                │              (Extensibility Layer)                      │
+                └─────────────────────────────────────────────────────────┘
+                      │                                              │
+                      ▼                                              ▼
+             ┌─────────────────┐                           ┌─────────────────┐
+             │ InMemoryStorage │                           │ SqlServerStorage│
+             │       (V1)      │                           │       (V2)      │
+             └─────────────────┘                           └─────────────────┘
 
 
 
